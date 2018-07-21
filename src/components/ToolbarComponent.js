@@ -41,7 +41,7 @@ class ToolbarComponent extends Component {
           </button>
         </div>
       </div>
-    )
+    );
   }
 }
 
