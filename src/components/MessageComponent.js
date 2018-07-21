@@ -1,27 +1,27 @@
 import React, { Component } from 'react'
 
-class MessageComponent extends Component {
-  render () {
-    return (
-      <div class="row message unread">
-      <div class="col-xs-1">
-        <div class="row">
-          <div class="col-xs-2">
+const Message = (props) => {
+  return (
+    <div className="row message read">
+      <div className="col-xs-1">
+        <div className="row">
+          <div className="col-xs-2">
             <input type="checkbox" />
           </div>
-          <div class="col-xs-2">
-            <i class="star fa fa-star-o"></i>
+          <div className="col-xs-2">
+            <i className="star fa fa-star"></i>
           </div>
         </div>
       </div>
-      <div class="col-xs-11">
+      <div className="col-xs-11">
+        <span className="label label-warning">dev</span>
+        <span className="label label-warning">gschool</span>
         <a href="#">
           Here is some message text that has a bunch of stuff
         </a>
       </div>
     </div>
-    );
-  }
+  )
 }
 
-export default MessageComponent;
+export default Message;
