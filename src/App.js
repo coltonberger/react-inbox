@@ -73,8 +73,12 @@ class App extends Component {
   }
 
   selectMessage = (message) => {
-    //console.log('clicked', message)
     message.selected = !message.selected
+    this.setState(this.state.messages.concat(message))
+  }
+
+  readMessage = (message) => {
+    message.read = true
     this.setState(this.state.messages.concat(message))
   }
 
@@ -88,6 +92,7 @@ class App extends Component {
           messages={this.state.messages}
           starMessage={this.starMessage}
           selectMessage={this.selectMessage}
+          readMessage={this.readMessage}
         />
       </div>
     );

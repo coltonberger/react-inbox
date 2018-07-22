@@ -12,6 +12,7 @@ class MessageListComponent extends Component {
           message={message}
           starMessage={this.props.starMessage}
           selectMessage={this.props.selectMessage}
+          readMessage={this.props.readMessage}
         />
       )
     })

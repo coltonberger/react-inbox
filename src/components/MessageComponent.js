@@ -3,11 +3,12 @@ import React, { Component } from 'react'
 const Message = ({
   message,
   starMessage,
-  selectMessage
+  selectMessage,
+  readMessage
 }) => {
   let labelList = message.labels.map((label, index) => {
     return (
-      <span className="label label-warning">{label}</span>
+      <span key={index} className="label label-warning">{label}</span>
     )
   })
 
@@ -28,7 +29,7 @@ const Message = ({
           </div>
         </div>
       </div>
-      <div className="col-xs-11">
+      <div className="col-xs-11" onClick={() => readMessage(message)}>
         {labelList}
         <a href="#">
           {message.subject}
