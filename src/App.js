@@ -72,6 +72,14 @@ class App extends Component {
     this.setState(this.state.messages.concat(message))
   }
 
+  selectMessage = (message) => {
+    //console.log('clicked', message)
+    message.selected = !message.selected
+    this.setState(this.state.messages.concat(message))
+  }
+
+
+
   render() {
     return (
       <div className="App">
@@ -79,6 +87,7 @@ class App extends Component {
         <MessageListComponent
           messages={this.state.messages}
           starMessage={this.starMessage}
+          selectMessage={this.selectMessage}
         />
       </div>
     );

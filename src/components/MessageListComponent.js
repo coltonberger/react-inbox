@@ -11,6 +11,7 @@ class MessageListComponent extends Component {
           key={index}
           message={message}
           starMessage={this.props.starMessage}
+          selectMessage={this.props.selectMessage}
         />
       )
     })
