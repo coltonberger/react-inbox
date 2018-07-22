@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const Message = ({message}) => {
+const Message = ({message, starMessage}) => {
   let labelList = message.labels.map((label, index) => {
     return (
       <span className="label label-warning">{label}</span>
@@ -12,10 +12,12 @@ const Message = ({message}) => {
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
-            <input type="checkbox"checked={message.selected}/>
+            <input type="checkbox" checked={message.selected} />
           </div>
           <div className="col-xs-2">
-            <i className={`star fa fa-star${message.starred ? '' : '-o'}`}></i>
+            <i className={`star fa fa-star${message.starred ? '' : '-o'}`}
+               onClick={() => starMessage(message)}
+            ></i>
           </div>
         </div>
       </div>

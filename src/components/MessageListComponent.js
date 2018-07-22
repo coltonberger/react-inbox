@@ -8,8 +8,9 @@ class MessageListComponent extends Component {
     let messageList = this.props.messages.map((message, index) => {
       return (
         <MessageComponent
-        key={index}
-        message={message}
+          key={index}
+          message={message}
+          starMessage={this.props.starMessage}
         />
       )
     })

@@ -66,12 +66,19 @@ class App extends Component {
     ]
   }
 
+  starMessage = (message) => {
+    //console.log('clicked', message)
+    message.starred = !message.starred
+    this.setState(this.state.messages.concat(message))
+  }
+
   render() {
     return (
       <div className="App">
         <ToolbarComponent />
         <MessageListComponent
           messages={this.state.messages}
+          starMessage={this.starMessage}
         />
       </div>
     );
