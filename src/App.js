@@ -82,12 +82,55 @@ class App extends Component {
     this.setState(this.state.messages.concat(message))
   }
 
+  selectedIndicator = () => {
+    let amountSelected = this.state.messages.filter( message => {
+      return message.selected
+    }).length
+
+    let action = ''
+
+    if (amountSelected === this.state.messages.length) {
+      action = '-check'
+    } else if (amountSelected === 0){
+      action = ''
+    } else {
+      action = '-minus'
+    }
+
+      return action
+  }
+
+  //when clicked all should messages should be checked
+  selectedIndicatorFunc = () => {
+    let amountSelected = this.state.messages.filter( message => {
+      return message.selected
+    }).length
+
+    if (amountSelected === this.state.messages.length) {
+      this.setState({
+        message: this.state.messages.map(message => {
+          message.selected = false
+          return message
+        })
+      })
+    } else {
+      this.setState({
+        message: this.state.messages.map(message => {
+          message.selected = true
+          return message
+        })
+      })
+    }
+  }
 
 
   render() {
     return (
       <div className="App">
-        <ToolbarComponent />
+        <ToolbarComponent
+          selectedIndicator={this.selectedIndicator}
+          selectedIndicatorFunc={this.selectedIndicatorFunc}
+        />
         <MessageListComponent
           messages={this.state.messages}
           starMessage={this.starMessage}

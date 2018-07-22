@@ -12,7 +12,9 @@ class ToolbarComponent extends Component {
           </p>
 
           <button className="btn btn-default">
-            <i className="fa fa-square-o"></i>
+            <i className={`fa fa${this.props.selectedIndicator()}-square-o`}
+               onClick={() => this.props.selectedIndicatorFunc()}
+            ></i>
           </button>
 
           <button className="btn btn-default" disabled="disabled">
