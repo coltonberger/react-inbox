@@ -22,7 +22,7 @@ const Message = ({message}) => {
       <div className="col-xs-11">
         {labelList}
         <a href="#">
-          Here is some message text that has a bunch of stuff
+          {message.subject}
         </a>
       </div>
     </div>
