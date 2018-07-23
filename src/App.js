@@ -123,13 +123,50 @@ class App extends Component {
     }
   }
 
+  markReadStatus(){
+    let selectedMessages = this.state.messages.filter(message => message.selected)
+    this.setState(this.state.messages.concat(selectedMessages.map(message => {
+      message.read = true
+      return message
+    })))
+  }
+
+  markUnreadStatus(){
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    this.setState(this.state.messages.concat(selectedMessages.map(message => {
+      message.read = false
+      return message
+    })))
+  }
+
+  disableReadButton =() => {
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    let readStatusArray = selectedMessages.map(message => {
+      return message.read ? true : false
+    })
+    return readStatusArray.includes(true) || readStatusArray.length === 0 ? 'disable' : ''
+  }
+
+  disableUnreadButton =() => {
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    let readStatusArray = selectedMessages.map(message => {
+      return message.read ? true : false
+    })
+    return readStatusArray.includes(false) || readStatusArray.length === 0 ? 'disable' : ''
+  }
 
   render() {
     return (
       <div className="App">
         <ToolbarComponent
+          messages={this.state.messages}
           selectedIndicator={this.selectedIndicator}
           selectedIndicatorFunc={this.selectedIndicatorFunc}
+          markReadStatus={this.markReadStatus}
+          markUnreadStatus={this.markUnreadStatus}
+          disableReadButton={this.disableReadButton}
+          disableUnreadButton={this.disableUnreadButton}
+
         />
         <MessageListComponent
           messages={this.state.messages}
