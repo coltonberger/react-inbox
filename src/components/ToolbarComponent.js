@@ -27,21 +27,30 @@ class ToolbarComponent extends Component {
             Mark As Unread
           </button>
 
-          <select className="form-control label-select" disabled="disabled">
+          <select
+              className="form-control label-select"
+              disabled={`${this.props.disabledApplyLabelDropDown()}`}
+              onChange={() => this.props.applyLabel( document.querySelectorAll('select')[0].value)}
+              >
             <option>Apply label</option>
             <option value="dev">dev</option>
             <option value="personal">personal</option>
             <option value="gschool">gschool</option>
           </select>
 
-          <select className="form-control label-select" disabled="disabled">
+          <select
+              className="form-control label-select"
+              disabled={`${this.props.disabledRemoveLabelDropDown()}`}
+              onChange={() => this.props.removeLabel( document.querySelectorAll('select')[1].value)}
+              >
             <option>Remove label</option>
             <option value="dev">dev</option>
             <option value="personal">personal</option>
             <option value="gschool">gschool</option>
           </select>
 
-          <button className="btn btn-default" disabled="disabled">
+          <button
+            className="btn btn-default" disabled={`${this.props.disabledDeleteButton()}`}>
             <i className="fa fa-trash-o"></i>
           </button>
         </div>

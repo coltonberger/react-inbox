@@ -155,6 +155,53 @@ class App extends Component {
     return readStatusArray.includes(false) || readStatusArray.length === 0 ? 'disable' : ''
   }
 
+  disabledDeleteButton = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    let readStatusArray = selectedMessages.map(message => {
+      return message.selected ? true : false
+    })
+    return readStatusArray.includes(false) || readStatusArray.length === 0 ? 'disable' : ''
+  }
+
+  disabledRemoveLabelDropDown = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    return selectedMessages === 0 ? 'disabled' : ''
+  }
+
+  disabledApplyLabelDropDown = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    return selectedMessages === 0 ? 'disabled' : ''
+  }
+
+  applyLabel = (label) => {
+    if(label === 'Apply label') return
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+
+    if (selectedMessages.labels.includes(label)) return
+
+    this.setState(this.state.messages.concat(selectedMessages.map(message => {
+      message.labels.push(label)
+      return message
+    })))
+  }
+
+  removeLabel = (label) => {
+    if(label === 'Remove label') return
+    let selectedMessages = this.state.messages.filter( message => message.selected)
+    this.setState(this.state.messages.concat(selectedMessages.map(message => {
+      message.labels.splice(label, 1)
+      return message
+    })))
+  }
+
+  deleteMessage = () => {
+    this.setState({
+      messages: this.state.messages.filter(message => {
+        return !message.selected
+      })
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -166,6 +213,11 @@ class App extends Component {
           markUnreadStatus={this.markUnreadStatus}
           disableReadButton={this.disableReadButton}
           disableUnreadButton={this.disableUnreadButton}
+          disabledDeleteButton={this.disabledDeleteButton}
+          disabledRemoveLabelDropDown={this.disabledRemoveLabelDropDown}
+          disabledApplyLabelDropDown={this.disabledApplyLabelDropDown}
+          removeLabel={this.removeLabel}
+          applyLabel={this.applyLabel}
 
         />
         <MessageListComponent
