@@ -175,11 +175,10 @@ class App extends Component {
 
   applyLabel = (label) => {
     if(label === 'Apply label') return
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-
-    if (selectedMessages.labels.includes(label)) return
+    let selectedMessages = this.state.messages.filter(message => message.selected)
 
     this.setState(this.state.messages.concat(selectedMessages.map(message => {
+      if(message.labels.includes(label)) return message
       message.labels.push(label)
       return message
     })))
