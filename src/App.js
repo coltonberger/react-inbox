@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import ToolbarComponent from './components/ToolbarComponent';
-import MessageListComponent from './components/MessageListComponent';
+import React, { Component } from 'react'
+import './App.css';
+import ToolbarComponent from './components/ToolbarComponent'
+import MessageListComponent from './components/MessageListComponent'
 
 class App extends Component {
+
   state = {
     messages: [
       {
@@ -63,171 +65,138 @@ class App extends Component {
         "starred": true,
         "labels": []
       }
-    ]
-  }
+    ]}
 
-  starMessage = (message) => {
-    //console.log('clicked', message)
-    message.starred = !message.starred
-    this.setState(this.state.messages.concat(message))
-  }
-
-  selectMessage = (message) => {
-    message.selected = !message.selected
-    this.setState(this.state.messages.concat(message))
-  }
-
-  readMessage = (message) => {
-    message.read = true
-    this.setState(this.state.messages.concat(message))
-  }
-
-  selectedIndicator = () => {
-    let amountSelected = this.state.messages.filter( message => {
-      return message.selected
-    }).length
-
-    let action = ''
-
-    if (amountSelected === this.state.messages.length) {
-      action = '-check'
-    } else if (amountSelected === 0){
-      action = ''
-    } else {
-      action = '-minus'
+    //Message changes
+    starClicked = (message) => {
+      //console.log('clicked')
+      message.starred = !message.starred
+      this.setState(this.state.messages.concat(message)); //concat adds the new state of the message into the message without adding a new one
     }
+
+    selectedMessage = (message) => {
+      //console.log('clicked');
+      message.selected = !message.selected
+      this.setState(this.state.messages.concat(message));
+    }
+
+    messageRead = (message) => {
+      //console.log('message clicked')
+      message.read = true
+      this.setState(this.state.messages.concat(message));
+    }
+
+    //TOOLBAR CHANGE
+    toolbarMessageIconChange = () => {
+      let numMessageSelected = this.state.messages.filter((message) => {
+        return message.selected
+      }).length
+
+      let action = ''
+
+      if (numMessageSelected === this.state.messages.length){
+        action = '-check'
+      } else if (numMessageSelected === 0) {
+        action = ''
+      } else {
+        action = '-minus'
+      }
 
       return action
-  }
+    }
 
-  //when clicked all should messages should be checked
-  selectedIndicatorFunc = () => {
-    let amountSelected = this.state.messages.filter( message => {
-      return message.selected
-    }).length
+    selectAllBtnAction = () => {
+      let numMessageSelected = this.state.messages.filter((message) => {
+        return message.selected
+      }).length
 
-    if (amountSelected === this.state.messages.length) {
-      this.setState({
-        message: this.state.messages.map(message => {
-          message.selected = false
-          return message
+      if(numMessageSelected === this.state.messages.length) {
+        this.setState({
+          message: this.state.messages.map((message) => {
+            message.selected = false
+            return message
+          })
         })
-      })
-    } else {
+      } else {
+        this.setState({
+          message: this.state.messages.map((message) => {
+            message.selected = true
+            return message
+          })
+        })
+      }
+    }
+
+    markAsRead = () => {
+      //console.log('markAsRead clicked')
       this.setState({
-        message: this.state.messages.map(message => {
-          message.selected = true
-          return message
+        messages: this.state.messages.map(message => (
+          message.selected ? { ...message, read: true } : message
+        ))
+      })
+    }
+
+    markAsUnread = () => {
+      //console.log('markAsUnread clicked')
+      this.setState({
+        messages: this.state.messages.map(message => (
+          message.selected ? { ...message, read: false } : message
+        ))
+      })
+    }
+
+    addLabel = (label) => {
+      if(label === 'Apply label') return
+      let selectedMessages = this.state.messages.filter(message => message.selected)
+
+      this.setState(this.state.messages.concat(selectedMessages.map(message => {
+        if(message.labels.includes(label)) return message
+        message.labels.push(label)
+        return message
+      })))
+    }
+
+    removeLabel = (label) => {
+      if(label === 'Remove label') return
+      let selectedMessages = this.state.messages.filter( message => message.selected)
+      this.setState(this.state.messages.concat(selectedMessages.map(message => {
+        message.labels.splice(label, 1)
+        return message
+      })))
+    }
+
+    deleteMessage = () => {
+      //console.log('delete icon clicked')
+      this.setState({
+        messages: this.state.messages.filter(message => {
+          return !message.selected
         })
       })
     }
-  }
 
-  markReadStatus(){
-    let selectedMessages = this.state.messages.filter(message => message.selected)
-    this.setState(this.state.messages.concat(selectedMessages.map(message => {
-      message.read = true
-      return message
-    })))
-  }
+    render() {
+      return (
+        <div className = "App">
+          <ToolbarComponent
+           messages = {this.state.messages}
+           toolbarMessageIconChange = {this.toolbarMessageIconChange}
+           selectAllBtnAction = {this.selectAllBtnAction}
+           markAsRead = {this.markAsRead}
+           markAsUnread= {this.markAsUnread}
+           deleteMessage= {this.deleteMessage}
+           addLabel = {this.addLabel}
+           removeLabel = {this.removeLabel}
+          />
 
-  markUnreadStatus(){
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    this.setState(this.state.messages.concat(selectedMessages.map(message => {
-      message.read = false
-      return message
-    })))
-  }
-
-  disableReadButton =() => {
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    let readStatusArray = selectedMessages.map(message => {
-      return message.read ? true : false
-    })
-    return readStatusArray.includes(true) || readStatusArray.length === 0 ? 'disable' : ''
-  }
-
-  disableUnreadButton =() => {
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    let readStatusArray = selectedMessages.map(message => {
-      return message.read ? true : false
-    })
-    return readStatusArray.includes(false) || readStatusArray.length === 0 ? 'disable' : ''
-  }
-
-  disabledDeleteButton = () => {
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    let readStatusArray = selectedMessages.map(message => {
-      return message.selected ? true : false
-    })
-    return readStatusArray.includes(false) || readStatusArray.length === 0 ? 'disable' : ''
-  }
-
-  disabledRemoveLabelDropDown = () => {
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    return selectedMessages === 0 ? 'disabled' : ''
-  }
-
-  disabledApplyLabelDropDown = () => {
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    return selectedMessages === 0 ? 'disabled' : ''
-  }
-
-  applyLabel = (label) => {
-    if(label === 'Apply label') return
-    let selectedMessages = this.state.messages.filter(message => message.selected)
-
-    this.setState(this.state.messages.concat(selectedMessages.map(message => {
-      if(message.labels.includes(label)) return message
-      message.labels.push(label)
-      return message
-    })))
-  }
-
-  removeLabel = (label) => {
-    if(label === 'Remove label') return
-    let selectedMessages = this.state.messages.filter( message => message.selected)
-    this.setState(this.state.messages.concat(selectedMessages.map(message => {
-      message.labels.splice(label, 1)
-      return message
-    })))
-  }
-
-  deleteMessage = () => {
-    this.setState({
-      messages: this.state.messages.filter(message => {
-        return !message.selected
-      })
-    })
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <ToolbarComponent
-          messages={this.state.messages}
-          selectedIndicator={this.selectedIndicator}
-          selectedIndicatorFunc={this.selectedIndicatorFunc}
-          markReadStatus={this.markReadStatus}
-          markUnreadStatus={this.markUnreadStatus}
-          disableReadButton={this.disableReadButton}
-          disableUnreadButton={this.disableUnreadButton}
-          disabledDeleteButton={this.disabledDeleteButton}
-          disabledRemoveLabelDropDown={this.disabledRemoveLabelDropDown}
-          disabledApplyLabelDropDown={this.disabledApplyLabelDropDown}
-          removeLabel={this.removeLabel}
-          applyLabel={this.applyLabel}
-
-        />
-        <MessageListComponent
-          messages={this.state.messages}
-          starMessage={this.starMessage}
-          selectMessage={this.selectMessage}
-          readMessage={this.readMessage}
-        />
-      </div>
-    );
-  }
+          <MessageListComponent
+            messages = {this.state.messages}
+            starMessage = {this.starClicked}
+            selectedMessage = {this.selectedMessage}
+            messageRead = {this.markAsRead}
+          />
+        </div>
+      )
+    }
 }
 
 export default App;

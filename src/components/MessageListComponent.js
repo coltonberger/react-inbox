@@ -1,28 +1,17 @@
 import React, { Component } from 'react'
 import MessageComponent from './MessageComponent'
+//grabbing state and now have access to it. USE PROPS
 
-class MessageListComponent extends Component {
-
-  render () {
-    //console.log(this.props.messages)
-    let messageList = this.props.messages.map((message, index) => {
-      return (
-        <MessageComponent
-          key={index}
-          message={message}
-          starMessage={this.props.starMessage}
-          selectMessage={this.props.selectMessage}
-          readMessage={this.props.readMessage}
-        />
-      )
-    })
-
-    return (
-      <div>
-        {messageList}
-      </div>
-    );
-  }
+const MessageListComponent = props => {
+  //console.log(props.messages)
+  return props.messages.map(message =>
+    <MessageComponent
+      message={message}
+      starMessage={props.starMessage}
+      selectedMessage = {props.selectedMessage}
+      messageRead= {props.messageRead}
+      />
+  )
 }
 
 export default MessageListComponent;

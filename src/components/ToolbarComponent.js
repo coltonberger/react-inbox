@@ -1,62 +1,65 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-class ToolbarComponent extends Component {
+const ToolbarComponent = (props) => {
 
-  render () {
-    let unReadMessages = this.props.messages.filter(message => !message.read).length
+  //toolbar messageunread count change
+  let UnreadMessagesCount = props.messages.filter(message => !message.read).length
 
-    return (
-      <div className="row toolbar">
-        <div className="col-md-12">
-          <p className="pull-right">
-            <span className="badge badge">{unReadMessages}</span>
-            unread messages
-          </p>
+  return (
+    <div className="row toolbar">
+    <div className="col-md-12">
+    <p className="pull-right">
+      <span className="badge badge">{UnreadMessagesCount}</span>
+      unread messages
+    </p>
 
-          <button className="btn btn-default">
-            <i className={`fa fa${this.props.selectedIndicator()}-square-o`}
-               onClick={() => this.props.selectedIndicatorFunc()}
-            ></i>
-          </button>
+    <a className="btn btn-danger">
+      <i className="fa fa-plus"></i>
+    </a>
 
-          <button className="btn btn-default" disabled={`${this.props.disableReadButton()}`} onClick={() => this.props.markReadStatus()}>
-            Mark As Read
-          </button>
+    <button className="btn btn-default">
+      <i
+      className={`fa fa${props.toolbarMessageIconChange()}-square-o`}
+      onClick={() => props.selectAllBtnAction()}
+      ></i>
+    </button>
 
-          <button className="btn btn-default" disabled={`${this.props.disableUnreadButton()}`} onClick={() => this.props.markUnreadStatus()}>
-            Mark As Unread
-          </button>
+    <button className="btn btn-default"
+            onClick={() => props.markAsRead()}
+            >Mark As Read
+    </button>
 
-          <select
-              className="form-control label-select"
-              disabled={`${this.props.disabledApplyLabelDropDown()}`}
-              onChange={() => this.props.applyLabel( document.querySelectorAll('select')[0].value)}
-              >
-            <option>Apply label</option>
-            <option value="dev">dev</option>
-            <option value="personal">personal</option>
-            <option value="gschool">gschool</option>
-          </select>
+    <button className="btn btn-default"
+            onClick={() => props.markAsUnread()}
+            >Mark As Unread
+    </button>
 
-          <select
-              className="form-control label-select"
-              disabled={`${this.props.disabledRemoveLabelDropDown()}`}
-              onChange={() => this.props.removeLabel( document.querySelectorAll('select')[1].value)}
-              >
-            <option>Remove label</option>
-            <option value="dev">dev</option>
-            <option value="personal">personal</option>
-            <option value="gschool">gschool</option>
-          </select>
+    <select className="form-control label-select"
+      onChange={() => props.addLabel( document.querySelectorAll('select')[0].value)}
+      >
+      <option>Apply label</option>
+      <option value="dev">dev</option>
+      <option value="personal">personal</option>
+      <option value="gschool">gschool</option>
+    </select>
 
-          <button
-            className="btn btn-default" disabled={`${this.props.disabledDeleteButton()}`}>
-            <i className="fa fa-trash-o"></i>
-          </button>
-        </div>
-      </div>
-    );
-  }
+    <select className="form-control label-select"
+      onChange={() => props.removeLabel( document.querySelectorAll('select')[1].value)}
+      >
+      <option>Remove label</option>
+      <option value="dev">dev</option>
+      <option value="personal">personal</option>
+      <option value="gschool">gschool</option>
+    </select>
+
+    <button className="btn btn-default">
+      <i className="fa fa-trash-o"
+         onClick={() => props.deleteMessage()}
+      ></i>
+    </button>
+  </div>
+</div>
+  )
 }
 
 export default ToolbarComponent;
