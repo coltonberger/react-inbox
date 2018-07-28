@@ -192,7 +192,7 @@ class App extends Component {
             messages = {this.state.messages}
             starMessage = {this.starClicked}
             selectedMessage = {this.selectedMessage}
-            messageRead = {this.markAsRead}
+            messageRead = {this.messageRead}
           />
         </div>
       )
