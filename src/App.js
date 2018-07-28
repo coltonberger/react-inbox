@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css';
 import ToolbarComponent from './components/ToolbarComponent'
 import MessageListComponent from './components/MessageListComponent'
+import ComposeMessageComponent from './components/ComposeMessageComponent'
 
 class App extends Component {
 
@@ -174,6 +175,11 @@ class App extends Component {
       })
     }
 
+    composeMessage = () => {
+      //console.log('compose message clicked')
+      
+    }
+
     render() {
       return (
         <div className = "App">
@@ -186,7 +192,10 @@ class App extends Component {
            deleteMessage= {this.deleteMessage}
            addLabel = {this.addLabel}
            removeLabel = {this.removeLabel}
+           composeMessage = {this.composeMessage}
           />
+
+          <ComposeMessageComponent />
 
           <MessageListComponent
             messages = {this.state.messages}

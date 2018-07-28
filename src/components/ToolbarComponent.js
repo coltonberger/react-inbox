@@ -14,7 +14,10 @@ const ToolbarComponent = (props) => {
     </p>
 
     <a className="btn btn-danger">
-      <i className="fa fa-plus"></i>
+      <i
+        className="fa fa-plus"
+        onClick={() => props.composeMessage()}
+      ></i>
     </a>
 
     <button className="btn btn-default">
