@@ -81,7 +81,7 @@ class App extends Component {
         //console.log('messages', messages)
         this.setState({messages})
       }
-      
+
 
     //Message changes
     starClicked = (message) => {
@@ -190,9 +190,11 @@ class App extends Component {
       })
     }
 
-    composeMessage = () => {
+    showComposeTemplate = () => {
       //console.log('compose message clicked')
-
+      this.setState({
+        showCompose: !this.state.showCompose
+      })
     }
 
     render() {
@@ -207,10 +209,12 @@ class App extends Component {
            deleteMessage= {this.deleteMessage}
            addLabel = {this.addLabel}
            removeLabel = {this.removeLabel}
-           composeMessage = {this.composeMessage}
+           showComposeTemplate = {this.showComposeTemplate}
           />
 
-          <ComposeMessageComponent />
+          <ComposeMessageComponent
+            showCompose={this.state.showCompose}
+          />
 
           <MessageListComponent
             messages = {this.state.messages}

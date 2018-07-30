@@ -16,7 +16,7 @@ const ToolbarComponent = (props) => {
     <a className="btn btn-danger">
       <i
         className="fa fa-plus"
-        onClick={() => props.composeMessage()}
+        onClick={() => props.showComposeTemplate()}
       ></i>
     </a>
 
