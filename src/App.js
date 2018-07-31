@@ -84,10 +84,32 @@ class App extends Component {
 
 
     //Message changes
-    starClicked = (message) => {
+
+    starClicked = async (message) => {
       //console.log('clicked')
       message.starred = !message.starred
       this.setState(this.state.messages.concat(message)); //concat adds the new state of the message into the message without adding a new one
+      // construct object for request body {command: "star", messageIds: [message.id]}
+        let postData = {
+          command: "star",
+          messageIds: [message.id]
+        }
+      // run the fetch
+      const messagesJson = await fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(postData)
+      }
+    )
+
+    let messages = await messagesJson.json()
+
+      // when the response comes back, we should get all the messages back, so just setState on the response
+
+    this.setState({messages})
     }
 
     selectedMessage = (message) => {
