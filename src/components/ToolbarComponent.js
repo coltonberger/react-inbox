@@ -38,7 +38,8 @@ const ToolbarComponent = (props) => {
     </button>
 
     <select className="form-control label-select"
-      onChange={() => props.addLabel( document.querySelectorAll('select')[0].value)}
+      //onChange={() => props.addLabel( document.querySelectorAll('select')[0].value)}
+      onChange={props.addLabel}
       >
       <option>Apply label</option>
       <option value="dev">dev</option>
@@ -47,7 +48,8 @@ const ToolbarComponent = (props) => {
     </select>
 
     <select className="form-control label-select"
-      onChange={() => props.removeLabel( document.querySelectorAll('select')[1].value)}
+      //onChange={() => props.removeLabel( document.querySelectorAll('select')[1].value)}
+      onChange={props.removeLabel}
       >
       <option>Remove label</option>
       <option value="dev">dev</option>

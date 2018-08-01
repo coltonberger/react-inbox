@@ -6,10 +6,24 @@ import ComposeMessageComponent from './components/ComposeMessageComponent'
 
 class App extends Component {
 
-  state = {
-    messages: [
+  state = { messages: [] }
 
-    ]}
+    toggleProperty(message, property) {
+      const index = this.state.messages.indexOf(message)
+      this.setState({
+        messages: [
+          ...this.state.messages.slice(0, index),
+          {...message, [property]: !message[property]},
+          ...this.state.messages.slice(index + 1)
+        ]
+      })
+
+    }
+
+    //switching between selected
+    handleToggleSelected = message => {
+      this.toggleProperty(message,'selected')
+    }
 
     //Get current message inbox from API:
     // React API
@@ -166,24 +180,48 @@ class App extends Component {
       }
     }
 
-    addLabel = (label) => {
-      if(label === 'Apply label') return
-      let selectedMessages = this.state.messages.filter(message => message.selected)
-
-      this.setState(this.state.messages.concat(selectedMessages.map(message => {
-        if(message.labels.includes(label)) return message
-        message.labels.push(label)
-        return message
-      })))
+    addLabel = async () => {
+      const label = document.querySelector('select').value
+      const selected = this.state.messages.filter(message => message.selected)
+      const messageIds = selected.map(message => message.id)
+      console.log(messageIds, label);
+      await fetch('http://localhost:8082/api/messages',
+        {
+          method: 'PATCH',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify({
+          messageIds,
+          command: "addLabel",
+          label,
+        })
+      })
+      .then(response => this.updateMessages()
+      )
     }
 
-    removeLabel = (label) => {
-      if(label === 'Remove label') return
-      let selectedMessages = this.state.messages.filter( message => message.selected)
-      this.setState(this.state.messages.concat(selectedMessages.map(message => {
-        message.labels.splice(label, 1)
-        return message
-      })))
+    removeLabel = async () => {
+      const label = document.querySelector('select').value
+      const selected = this.state.messages.filter(message => message.selected)
+      const messageIds = selected.map(message => message.id)
+      console.log(messageIds, label);
+      await fetch('http://localhost:8082/api/messages',
+        {
+          method: 'PATCH',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify({
+          messageIds,
+          command: "removeLabel",
+          label,
+        })
+      })
+      .then(response => this.updateMessages()
+      )
     }
 
     deleteMessage =  async () => {
@@ -213,7 +251,6 @@ class App extends Component {
     }
 
     showComposeTemplate = () => {
-      //console.log('compose message clicked')
       this.setState({
         showCompose: !this.state.showCompose
       })
@@ -243,8 +280,9 @@ class App extends Component {
           <MessageListComponent
             messages = {this.state.messages}
             starMessage = {this.starClicked}
-            selectedMessage = {this.selectedMessage}
+            //selectedMessage = {this.selectedMessage}
             messageRead = {this.messageRead}
+            handleToggleSelected = {this.handleToggleSelected}
           />
         </div>
       )

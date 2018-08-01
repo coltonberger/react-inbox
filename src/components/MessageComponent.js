@@ -1,9 +1,15 @@
 
 import React, { Component } from 'react';
+import Labels from './Labels'
 
 
 class MessageComponent extends Component {
   render () {
+
+    const selected = e => {
+      e.stopPropagation();
+      this.props.handleToggleSelected(this.props.message)
+    }
 
     const label = this.props.message.labels.map((label, i) => (
       <span key={i} className="label label-warning">{label}</span>
@@ -18,7 +24,7 @@ class MessageComponent extends Component {
               <input
                type="checkbox"
                checked={this.props.message.selected}
-               onChange={ () => this.props.selectedMessage(this.props.message)}
+               onClick={ selected }
                />
             </div>
             <div className="col-xs-2">
@@ -28,10 +34,8 @@ class MessageComponent extends Component {
             </div>
           </div>
         </div>
-        <div className="col-xs-11"
-        onClick={ () => this.props.messageRead(this.props.message)}
-        >
-        {label}
+        <div className="col-xs-11">
+          <Labels labels={this.props.message.labels} />
 
         <a href="#">
           {this.props.message.subject}
