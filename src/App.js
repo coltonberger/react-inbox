@@ -78,7 +78,7 @@ class App extends Component {
     }
 
     messageRead = async (message) => {
-      console.log("this is a message === ", message);
+      //console.log("this is a message === ", message);
       // construct object for request body {command: "star", messageIds: [message.id]}
       let postData = {
         command: 'read',
@@ -86,7 +86,31 @@ class App extends Component {
         messageIds: [message.id]
       }
       // run the fetch
-      console.log("About to run a put to the messages (unread)")
+      //console.log("About to run a put to the messages (unread)")
+      const messagesJson = await fetch('http://localhost:8082/api/messages', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(postData)
+      })
+      let messages = await messagesJson.json()
+      console.log("Came back from the patch and parsed json and got: ", messages)
+        // when the response comes back, we should get all the messages back, so just setState on the response
+      this.setState({messages})
+    }
+
+    markAsUnread = async (message) => {
+      //console.log("this is a message === ", message);
+      // construct object for request body {command: "star", messageIds: [message.id]}
+      let postData = {
+        command: 'read',
+        read: message.read,
+        messageIds: [message.id]
+      }
+      // run the fetch
+      //console.log("About to run a put to the messages (unread)")
       const messagesJson = await fetch('http://localhost:8082/api/messages', {
         method: 'PATCH',
         headers: {
@@ -142,24 +166,6 @@ class App extends Component {
       }
     }
 
-    // markAsRead = () => {
-    //   //console.log('markAsRead clicked')
-    //   this.setState({
-    //     messages: this.state.messages.map(message => (
-    //       message.selected ? { ...message, read: true } : message
-    //     ))
-    //   })
-    // }
-
-    markAsUnread = () => {
-      //console.log('markAsUnread clicked')
-      this.setState({
-        messages: this.state.messages.map(message => (
-          message.selected ? { ...message, read: false } : message
-        ))
-      })
-    }
-
     addLabel = (label) => {
       if(label === 'Apply label') return
       let selectedMessages = this.state.messages.filter(message => message.selected)
@@ -180,13 +186,30 @@ class App extends Component {
       })))
     }
 
-    deleteMessage = () => {
-      //console.log('delete icon clicked')
-      this.setState({
-        messages: this.state.messages.filter(message => {
-          return !message.selected
+    deleteMessage =  async () => {
+      const selected = this.state.messages.filter(message => message.selected)
+      const messageIds = selected.map(message => message.id)
+
+      await fetch('http://localhost:8082/api/messages',
+        {
+          method: 'PATCH',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify({
+
+          messageIds,
+          "command": "delete"
         })
       })
+      .then(response => this.updateMessages())
+    }
+
+    updateMessages = async () => {
+      const response = await fetch('http://localhost:8082/api/messages')
+      const json = await response.json()
+      this.setState({messages: json})
     }
 
     showComposeTemplate = () => {
@@ -209,6 +232,7 @@ class App extends Component {
            addLabel = {this.addLabel}
            removeLabel = {this.removeLabel}
            showComposeTemplate = {this.showComposeTemplate}
+           messageRead = {this.messageRead}
           />
 
           <ComposeMessageComponent

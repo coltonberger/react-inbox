@@ -28,7 +28,7 @@ const ToolbarComponent = (props) => {
     </button>
 
     <button className="btn btn-default"
-            onClick={() => props.markAsRead()}
+            onClick={() => props.messageRead()}
             >Mark As Read
     </button>
 
